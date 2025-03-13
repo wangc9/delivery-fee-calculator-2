@@ -6,9 +6,10 @@ import {
   within,
   waitFor,
 } from "@testing-library/react";
-import { beforeAll, describe, expect, test, afterEach } from "vitest";
+import { beforeAll, describe, expect, test, afterEach, vi } from "vitest";
 import CalculationForm from "./CalculationForm";
 import userEvent from "@testing-library/user-event";
+import { beforeEach } from "node:test";
 
 describe("Test CalculationForm component", () => {
   beforeAll(() => {
@@ -17,6 +18,22 @@ describe("Test CalculationForm component", () => {
 
   afterEach(() => {
     cleanup();
+  });
+
+  beforeEach(() => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        // Simulate a JSON response
+        json: () =>
+          Promise.resolve({
+            total_price: 10,
+            small_order_surcharge: 10,
+            cart_value: 10,
+            delivery: { fee: 10, distance: 10 },
+          }),
+      } as Response)
+    );
   });
 
   test("All form components can be rendered correctly", () => {

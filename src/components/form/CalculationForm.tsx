@@ -13,7 +13,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { calculateDeliveryFee } from "@/services/calculationServices";
+// import { calculateDeliveryFee } from "@/services/calculationServices";
 import { useState } from "react";
 import CalculationResult from "./CalculationResult";
 import { Loader2 } from "lucide-react";
@@ -64,16 +64,26 @@ export default function CalculationForm() {
   async function onSubmit(values: z.infer<typeof calculationFormSchema>) {
     setLoading(() => true);
 
-    const { error, fee, surcharge, distance } = await calculateDeliveryFee(
-      values.venueSlug,
-      [values.userLongitude, values.userLatitude],
-      values.cartValue
+    const data = await fetch(
+      `/api/v1/delivery-order-price?venue_slug=${values.venueSlug}&cart_value=${
+        values.cartValue * 100
+      }&user_lat=${values.userLatitude}&user_lon=${values.userLongitude}`
     );
+    const {
+      error,
+      small_order_surcharge: surcharge,
+      delivery,
+    } = await data.json();
+
+    const distance = delivery?.distance ?? 0;
+    const fee = delivery?.fee ?? 0;
 
     setNoDelivery(() => error);
     setCartValue(() => values.cartValue);
-    setDeliveryFee(() => fee);
-    setDeliverySurcharge(() => surcharge);
+    setDeliveryFee(() => Math.round((fee / 100 + Number.EPSILON) * 100) / 100);
+    setDeliverySurcharge(
+      () => Math.round((surcharge / 100 + Number.EPSILON) * 100) / 100
+    );
     setDeliveryDistance(() => distance);
 
     setLoading(() => false);

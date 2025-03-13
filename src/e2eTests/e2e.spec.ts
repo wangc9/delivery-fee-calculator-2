@@ -35,7 +35,7 @@ test("get correct result with manual input of location", async ({ page }) => {
   await expect(page.getByTestId("cart-value-result")).toHaveText("10 €");
   await expect(page.getByTestId("delivery-fee-result")).toHaveText("1.9 €");
   await expect(page.getByTestId("delivery-distance-result")).toHaveText(
-    "176.54 m"
+    "177 m"
   );
   await expect(page.getByTestId("delivery-surcharge-result")).toHaveText("0 €");
   await expect(page.getByTestId("total-price-result")).toHaveText("11.9 €");
