@@ -13,7 +13,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-// import { calculateDeliveryFee } from "@/services/calculationServices";
 import { useState } from "react";
 import CalculationResult from "./CalculationResult";
 import { Loader2 } from "lucide-react";
@@ -99,17 +98,17 @@ export default function CalculationForm() {
   }
 
   return (
-    <>
+    <section className="min-w-[320px] w-full">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full max-w-md"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
           <FormField
             control={form.control}
             name="venueSlug"
             render={({ field }) => (
-              <FormItem data-test-id="form-venue-slug-input">
+              <FormItem
+                data-test-id="form-venue-slug-input"
+                className="min-w-lg"
+              >
                 <FormLabel>Venue Slug</FormLabel>
                 <FormControl>
                   <Input
@@ -179,23 +178,25 @@ export default function CalculationForm() {
               </FormItem>
             )}
           />
-          <Button
-            type="button"
-            aria-label="Get location"
-            data-test-id="form-get-location-button"
-            onClick={onClick}
-          >
-            Get Location
-          </Button>
-          <Button
-            type="submit"
-            aria-label="Calculate"
-            data-test-id="form-submit-button"
-            disabled={loading}
-          >
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {loading ? "Calculating" : "Calculate"}
-          </Button>
+          <section className="flex justify-around">
+            <Button
+              type="button"
+              aria-label="Get location"
+              data-test-id="form-get-location-button"
+              onClick={onClick}
+            >
+              Get Location
+            </Button>
+            <Button
+              type="submit"
+              aria-label="Calculate"
+              data-test-id="form-submit-button"
+              disabled={loading}
+            >
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading ? "Calculating" : "Calculate"}
+            </Button>
+          </section>
         </form>
       </Form>
       {noDelivery ? (
@@ -215,6 +216,6 @@ export default function CalculationForm() {
           deliverySurcharge={deliverySurcharge}
         />
       )}
-    </>
+    </section>
   );
 }
